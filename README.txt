@@ -1,1 +1,1 @@
-Protected ShipQ audit page. The HTML payload is encrypted with AES-GCM; the password is not stored in this branch.
+Password-protected ShipQ fixture audit page. The published index.html contains encrypted ciphertext only.
