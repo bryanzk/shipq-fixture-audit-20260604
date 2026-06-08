@@ -58,13 +58,26 @@
       statusEl.className = 'status';
       statusEl.textContent = 'Decrypting...';
       try {
-        const html = await decrypt(document.getElementById('password').value);
+        const rawPassword = document.getElementById('password').value;
+        const trimmedPassword = rawPassword.trim();
+        const candidates = trimmedPassword && trimmedPassword !== rawPassword ? [rawPassword, trimmedPassword] : [rawPassword];
+        let html;
+        let lastError;
+        for (const candidate of candidates) {
+          try {
+            html = await decrypt(candidate);
+            break;
+          } catch (error) {
+            lastError = error;
+          }
+        }
+        if (!html) throw lastError;
         document.open();
         document.write(html);
         document.close();
       } catch (error) {
         statusEl.className = 'status error';
-        statusEl.textContent = 'Invalid password or corrupted protected page.';
+        statusEl.textContent = 'Invalid unlock password. Use the page unlock password, not the audit sync password.';
       }
     });
   </script>
